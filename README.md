@@ -13,8 +13,6 @@ planned models:
 
 primary metric: **mcc on held-out targets**
 
----
-
 ## reference paper: se(3)-protacs
 
 se(3)-protacs combines 3d protac representations with esm-2 protein embeddings to predict degradation.
@@ -36,8 +34,6 @@ key results:
 main takeaway: performance drops substantially on unseen targets, suggesting random splits overestimate real-world generalization.
 
 **our approach:** focus specifically on this generalization gap and test whether esm-2 target representations improve held-out-target performance without reproducing the full se(3) architecture.
-
----
 
 ## data summary
 
@@ -72,8 +68,6 @@ ar         417
 tau        362
 ar-v7      294
 ```
-
----
 
 ## degradation measurement cleaning
 
@@ -124,8 +118,6 @@ important decisions:
 - preserve raw values
 - leave ambiguous/corrupted values as `unparsed`
 
----
-
 ## molecular structure cleaning
 
 used rdkit to parse and canonicalize all smiles.
@@ -146,19 +138,12 @@ canonicalization did not reveal additional duplicate structures.
 3 compound ids      -> 2 structures
 ```
 
-affected ids:
-
-```text
-4151
-5363
-5369
-```
+affected ids: 4151, 5363, 5369
 
 the structures are genuinely different, not alternative smiles representations.
 
 **decision:** use canonical smiles as molecular identity for modeling; retain compound id only as source metadata.
 
----
 
 ## other data decisions
 
@@ -169,13 +154,11 @@ the structures are genuinely different, not alternative smiles representations.
 - multiple target variants can share one canonical uniprot id
 - some missing uniprot ids correspond to fusion proteins or other complex targets and may require special handling before esm-2
 
----
-
 ## pending: degradation labels
 
 final labels have **not been chosen yet**.
 
-reference definition:
+se(3) reference definition:
 
 ```text
 good degrader:
@@ -183,7 +166,6 @@ dc50 <= 100 nm AND dmax >= 80%
 ```
 
 options to evaluate:
-
 1. standard binary threshold
 2. high-confidence positive/negative labels with ambiguous observations excluded
 
