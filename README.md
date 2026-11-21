@@ -176,6 +176,52 @@ before choosing, compare:
 - target frequency
 - feasibility of held-out-target evaluation
 
+## degradation label definition
+
+compared two literature-based labeling strategies before selecting the final model outcome.
+
+### se(3)-protacs
+
+```text
+positive: dc50 <= 100 nm AND dmax >= 80%
+```
+
+result:
+
+```text
+labeled rows:       2,585
+positive:           1,060 (41%)
+negative:           1,525 (59%)
+unique molecules:   2,048
+unique uniprot:       180
+```
+
+### pandiyan et al.
+
+```text
+positive: dc50 < 10,000 nm OR dmax > 30%
+```
+
+result:
+
+```text
+labeled rows:       3,138
+positive:           3,138 (100%)
+negative:               0
+unique molecules:   2,523
+unique uniprot:       180
+```
+
+### decision
+
+use the **se(3) definition** as the primary degradation label.
+
+pandiyan's broader activity criterion produced no confidently labeled negatives in this dataset, making it unsuitable for binary classification.
+
+the se(3) definition produced a reasonably balanced dataset with sufficient molecular and target diversity for the planned unseen-target experiment.
+
+rows that cannot be confidently classified from the available dc50/dmax information remain `ambiguous` and are excluded from the primary modeling dataset.
+
 ---
 
 ## current status
@@ -187,7 +233,7 @@ before choosing, compare:
 - [x] rdkit smiles validation
 - [x] smiles canonicalization
 - [x] compound id / molecular identity audit
-- [ ] degradation label definition
+- [x] degradation label definition
 - [ ] model-ready dataset
 - [ ] held-out-target split
 - [ ] morgan fingerprints
