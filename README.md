@@ -178,49 +178,57 @@ before choosing, compare:
 
 ## degradation label definition
 
-compared two literature-based labeling strategies before selecting the final model outcome.
+compared three literature-based labeling strategies before selecting the model outcome.
 
 ### se(3)-protacs
 
 ```text
 positive: dc50 <= 100 nm AND dmax >= 80%
-```
 
-result:
-
-```text
-labeled rows:       2,585
-positive:           1,060 (41%)
-negative:           1,525 (59%)
-unique molecules:   2,048
-unique uniprot:       180
+labeled rows:       2,824
+positive:              87 (3.1%)
+negative:           2,737 (96.9%)
+unique molecules:   2,228
+unique uniprot:       179
 ```
 
 ### pandiyan et al.
 
 ```text
 positive: dc50 < 10,000 nm OR dmax > 30%
+
+labeled rows:       2,888
+positive:           2,872 (99.4%)
+negative:              16 (0.6%)
+unique molecules:   2,298
+unique uniprot:       182
 ```
 
-result:
+### why test another definition?
+
+se(3) produced very few positives, while pandiyan produced almost no negatives. we therefore tested ribes as another published definition rather than inventing thresholds to balance the dataset.
+
+### ribes et al.
+
+reused `labeling_se3.py` because the inclusive comparisons and AND logic are identical; changed only the thresholds.
 
 ```text
-labeled rows:       3,138
-positive:           3,138 (100%)
-negative:               0
-unique molecules:   2,523
-unique uniprot:       180
+positive: dc50 <= 1000 nm AND dmax >= 60%
+
+labeled rows:       2,254
+positive:           1,436 (63.7%)
+negative:             818 (36.3%)
+unique molecules:   1,782
+unique uniprot:       143
 ```
 
 ### decision
 
-use the **se(3) definition** as the primary degradation label.
-
-pandiyan's broader activity criterion produced no confidently labeled negatives in this dataset, making it unsuitable for binary classification.
-
-the se(3) definition produced a reasonably balanced dataset with sufficient molecular and target diversity for the planned unseen-target experiment.
-
-rows that cannot be confidently classified from the available dc50/dmax information remain `ambiguous` and are excluded from the primary modeling dataset.
+- selected **ribes**: literature-based thresholds with substantially better representation of both classes for our planned evaluation.
+- positive (`1`): both criteria confidently pass.
+- negative (`0`): either criterion confidently fails; does not necessarily mean no degradation.
+- ambiguous: insufficient evidence; excluded from the modeling subset.
+- saved the ribes-labeled subset as `data/processed/protac_clean.csv`.
 
 ---
 
@@ -234,7 +242,7 @@ rows that cannot be confidently classified from the available dc50/dmax informat
 - [x] smiles canonicalization
 - [x] compound id / molecular identity audit
 - [x] degradation label definition
-- [ ] model-ready dataset
+- [x] model-ready dataset
 - [ ] held-out-target split
 - [ ] morgan fingerprints
 - [ ] xgboost baseline
