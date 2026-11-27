@@ -14,3 +14,4 @@ dependencies:
   - ruff
   - rdkit
   - pyarrow
+  - scikit-learn

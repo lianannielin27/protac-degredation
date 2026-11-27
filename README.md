@@ -229,6 +229,23 @@ unique uniprot:       143
 - negative (`0`): either criterion confidently fails; does not necessarily mean no degradation.
 - ambiguous: insufficient evidence; excluded from the modeling subset.
 - saved the ribes-labeled subset as `data/processed/protac_clean.csv`.
+  
+  
+
+## day 4: evaluation splits
+
+- set aside 54 rows missing uniprot ids; split the remaining 2,200 rows.
+- used 7 stratified group folds (`random_state=42`): 5 train, 1 validation, 1 test.
+
+| split strategy | train | validation | test |
+|---|---:|---:|---:|
+| molecule-grouped | 1,572 | 314 | 314 |
+| target-held-out | 1,565 | 325 | 310 |
+
+- class balance remained approximately 64% positive / 36% negative.
+- verified molecule separation in `molecule_split.csv` and uniprot separation in `target_split.csv`; saved both under `data/processed/`.
+- target split retains 35 shared train/test molecules: unseen targets, not necessarily unseen molecules.
+- plan changes: kept verification in the notebook; deferred pytest/ci and sequence-similarity clustering. current target split does not guarantee protein-family separation.
 
 ---
 
@@ -243,7 +260,7 @@ unique uniprot:       143
 - [x] compound id / molecular identity audit
 - [x] degradation label definition
 - [x] model-ready dataset
-- [ ] held-out-target split
+- [x] held-out-target split
 - [ ] morgan fingerprints
 - [ ] xgboost baseline
 - [ ] esm-2 embeddings
